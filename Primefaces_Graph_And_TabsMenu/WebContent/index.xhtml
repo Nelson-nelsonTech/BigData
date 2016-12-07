@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+	<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+
+
+<p:layout style="width:90%;height:800px">
+    <p:layoutUnit position="west" resizable="true" size="250" minSize="100" maxSize="300">
+        <h:form>
+        <p:selectManyCheckbox id="grid3" value="#{checkboxView.selectedCars}" layout="pageDirection" columns="1">
+        <f:selectItems value="#{checkboxView.cars}" var="car" itemLabel="#{car}" itemValue="#{car}" />
+    </p:selectManyCheckbox>
+    
+        </h:form>
+    <h:form>
+    <p:growl id="msgs" showDetail="true" />
+ 
+          <h:panelGrid columns="2" cellpadding="5">
+            <p:selectOneMenu id="country" value="#{dropdownView.country}" style="width:150px">
+                <p:ajax listener="#{dropdownView.onCountryChange}"  />
+                <f:selectItem itemLabel="Select Country" itemValue="" noSelectionOption="true" />
+                <f:selectItems value="#{dropdownView.countries}" />
+            </p:selectOneMenu>
+            
+               </h:panelGrid>
+ 
+    
+    
+</h:form>
+        
+     <h:form id="form">
+    <p:growl id="msgs" showDetail="true" />
+ 
+    <h:panelGrid columns="2" cellpadding="5">
+       
+        <p:outputLabel for="effect" value="Start Date:" /><br />
+        <p:calendar id="effect" value="#{calendarView.date8}" pattern="dd-MM-yyyy" effect="fold" /><br />
+ 
+        <p:outputLabel for="mask" value="End Date:" /><br />
+        <p:calendar id="mask" value="#{calendarView.date9}" pattern="dd-MM-yyyy" effect="fold"  />
+ 
+        
+    </h:panelGrid>
+ <p:separator></p:separator>
+    <p:commandButton value="Submit" update="msgs" actionListener="#{calendarView.click}" icon="ui-icon-check" />
+ 
+    <p:dialog modal="true" resizable="false" header="Values" widgetVar="dlg" showEffect="fold">
+        <p:panelGrid id="display" columns="2" columnClasses="label,value">
+            
+            <h:outputText value="Effect:" />
+            <h:outputText value="#{calendarView.date8}">
+                <f:convertDateTime pattern="MM/dd/yyyy" />
+            </h:outputText>
+ 
+            <h:outputText value="Mask:" />
+            <h:outputText value="#{calendarView.date9}">
+                <f:convertDateTime pattern="MM/dd/yyyy" />
+            </h:outputText>
+ 
+      
+        </p:panelGrid>
+    </p:dialog>
+</h:form>
+
+
+        
+    </p:layoutUnit>
+ 
+    <p:layoutUnit position="center">
+    
+   <p:tabView> 
+<p:tab title="Line Graph">
+
+  <p:chart type="line" model="#{bean1.model}" style="height:500px;" responsive="true" />
+ </p:tab>
+
+ 
+<p:tab title="Table">
+    
+    
+        
+    <h:form>
+
+ <p:dataTable id="tbl" var="car" value="#{dataExporterView.cars}"
+                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                 paginator="true" rows="10" style="margin-bottom:20px">
+ 
+       <f:facet name="{Exporters}">
+            <h:commandLink>
+                <p:graphicImage name="WebContent/Demo/images/excel.png" width="24"/>
+                <p:dataExporter type="xls" target="tbl" fileName="cars" />
+            </h:commandLink>
+ 
+            <h:commandLink>
+                <p:graphicImage name="/demo/images/pdf.png" width="24"/>
+                <p:dataExporter type="pdf" target="tbl" fileName="cars"/>
+            </h:commandLink>
+ 
+            <h:commandLink>
+                <p:graphicImage name="/demo/images/csv.png" width="24"/>
+                <p:dataExporter type="csv" target="tbl" fileName="cars" />
+            </h:commandLink>
+ 
+            <h:commandLink>
+                <p:graphicImage name="/demo/images/xml.png" width="24"/>
+                <p:dataExporter type="xml" target="tbl" fileName="cars" />
+            </h:commandLink>
+        </f:facet>
+ 
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Id" />
+            </f:facet>
+            <h:outputText value="#{car.id}" />
+        </p:column>
+ 
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Year"/>
+            </f:facet>
+            <h:outputText value="#{car.year}" />
+        </p:column>
+ 
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Brand" />
+            </f:facet>
+            <h:outputText value="#{car.brand}" />
+        </p:column>
+ 
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Color" />
+            </f:facet>
+            <h:outputText value="#{car.color}" />
+        </p:column>
+    </p:dataTable>
+ 
+     <h3>Export Page Data Only</h3>
+    <h:commandLink>
+        <p:graphicImage name="/demo/images/excel.png" />
+        <p:dataExporter type="xls" target="tbl" fileName="cars" pageOnly="true"/>
+    </h:commandLink>
+ 
+    <h:commandLink>
+        <p:graphicImage name="/demo/images/pdf.png" />
+        <p:dataExporter type="pdf" target="tbl" fileName="cars" pageOnly="true" />
+    </h:commandLink>
+ 
+    <h:commandLink>
+        <p:graphicImage name="/Demo/images/csv.png" url="/Demo/images/csv.png"/>
+        <p:dataExporter type="csv" target="tbl" fileName="cars" pageOnly="true" />
+    </h:commandLink>
+ 
+    <h:commandLink>
+        <p:graphicImage name="/demo/images/xml.png" />
+        <p:dataExporter type="xml" target="tbl" fileName="cars" pageOnly="true" />
+    </h:commandLink>
+</h:form>
+
+        
+</p:tab>
+</p:tabView>        
+        
+    </p:layoutUnit>
+</p:layout>
+
+</h:head>
+<h:body>
+
+
+</h:body>
+</html>
